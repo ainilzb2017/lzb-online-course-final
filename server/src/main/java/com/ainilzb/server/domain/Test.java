@@ -1,15 +1,8 @@
 package com.ainilzb.server.domain;
 
-/**
- * @ClassName: Test
- * @Description: \
- * @Author 李泽波
- * @Date 2021/2/23
- * @Version 1.0
- */
 public class Test {
-
     private String id;
+
     private String name;
 
     public String getId() {
@@ -26,5 +19,17 @@ public class Test {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(getClass().getSimpleName());
+        sb.append(" [");
+        sb.append("Hash = ").append(hashCode());
+        sb.append(", id=").append(id);
+        sb.append(", name=").append(name);
+        sb.append("]");
+        return sb.toString();
     }
 }
