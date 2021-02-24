@@ -1,6 +1,7 @@
 package com.ainilzb.server.service;
 
 import com.ainilzb.server.domain.Test;
+import com.ainilzb.server.domain.TestExample;
 import com.ainilzb.server.mapper.TestMapper;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,17 @@ public class TestService {
     private TestMapper testMapper;
 
     public List<Test> list(){
-        return testMapper.list();
+
+        //TestExample相当于where
+        //排序
+//        TestExample testExample = new TestExample();
+//        testExample.setOrderByClause("id desc");
+
+        TestExample testExample = new TestExample();
+        //andIdEqualTo可以看得出id=1
+        testExample.createCriteria().andIdEqualTo("1");
+
+
+        return testMapper.selectByExample(testExample);
     }
 }
