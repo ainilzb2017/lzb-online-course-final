@@ -1,4 +1,4 @@
-package com.ainilzb;
+package com.ainilzb.system.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.mybatis.spring.annotation.MapperScan;
@@ -11,8 +11,8 @@ import org.springframework.core.env.Environment;
 @SpringBootApplication
 @EnableEurekaClient
 @Slf4j
-//@ComponentScan("com.ainilzb")
-@MapperScan("com.ainilzb.mapper")
+@ComponentScan("com.ainilzb")
+@MapperScan("com.ainilzb.server.mapper")
 public class SystemApplication {
 
 

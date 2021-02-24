@@ -1,4 +1,4 @@
-package com.ainilzb.domain;
+package com.ainilzb.server.domain;
 
 /**
  * @ClassName: Test

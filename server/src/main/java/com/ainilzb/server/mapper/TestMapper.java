@@ -1,6 +1,6 @@
-package com.ainilzb.mapper;
+package com.ainilzb.server.mapper;
 
-import com.ainilzb.domain.Test;
+import com.ainilzb.server.domain.Test;
 
 import java.util.List;
 

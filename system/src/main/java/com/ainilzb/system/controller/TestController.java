@@ -1,7 +1,7 @@
-package com.ainilzb.controller;
+package com.ainilzb.system.controller;
 
-import com.ainilzb.domain.Test;
-import com.ainilzb.service.TestService;
+import com.ainilzb.server.domain.Test;
+import com.ainilzb.server.service.TestService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 

@@ -1,7 +1,7 @@
-package com.ainilzb.service;
+package com.ainilzb.server.service;
 
-import com.ainilzb.domain.Test;
-import com.ainilzb.mapper.TestMapper;
+import com.ainilzb.server.domain.Test;
+import com.ainilzb.server.mapper.TestMapper;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
