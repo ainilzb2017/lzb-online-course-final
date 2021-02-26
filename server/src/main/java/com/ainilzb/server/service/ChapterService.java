@@ -2,10 +2,13 @@ package com.ainilzb.server.service;
 
 import com.ainilzb.server.domain.Chapter;
 import com.ainilzb.server.domain.ChapterExample;
+import com.ainilzb.server.dto.ChapterDto;
 import com.ainilzb.server.mapper.ChapterMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -21,7 +24,7 @@ public class ChapterService {
     @Resource
     private ChapterMapper chapterMapper;
 
-    public List<Chapter> list(){
+    public List<ChapterDto> list(){
 
         //ChapterExample相当于where
         //排序
@@ -30,9 +33,16 @@ public class ChapterService {
 
         ChapterExample chapterExample = new ChapterExample();
         //andIdEqualTo可以看得出id=1
-        chapterExample.createCriteria().andIdEqualTo("00000001");
+        chapterExample.createCriteria().andIdEqualTo("00000010");
 
-
-        return chapterMapper.selectByExample(chapterExample);
+        List<Chapter> chapterList =  chapterMapper.selectByExample(chapterExample);
+        List<ChapterDto> chapterDtoList = new ArrayList<ChapterDto>();
+        for (int i = 0; i < chapterList.size(); i++) {
+            Chapter chapter = chapterList.get(i);
+            ChapterDto chapterDto = new ChapterDto();
+            BeanUtils.copyProperties(chapter,chapterDto);
+            chapterDtoList.add(chapterDto);
+        }
+        return chapterDtoList;
     }
 }

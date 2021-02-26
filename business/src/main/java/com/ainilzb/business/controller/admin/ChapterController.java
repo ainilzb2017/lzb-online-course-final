@@ -1,6 +1,6 @@
-package com.ainilzb.business.controller;
+package com.ainilzb.business.controller.admin;
 
-import com.ainilzb.server.domain.Chapter;
+import com.ainilzb.server.dto.ChapterDto;
 import com.ainilzb.server.service.ChapterService;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,13 +17,14 @@ import java.util.List;
  */
 
 @RestController
+@RequestMapping("/admin")
 public class ChapterController {
 
     @Resource
     private ChapterService chapterService;
 
     @RequestMapping("/chapter")
-    public List<Chapter> chapter() {
+    public List<ChapterDto> chapter() {
         return chapterService.list();
     }
 }
