@@ -418,8 +418,8 @@
                 <div class="footer-inner">
                     <div class="footer-content">
 						<span class="bigger-120">
-							<span class="blue bolder">甲蛙</span>
-							在线视频课程 &copy; 2099-2099
+							<span class="blue bolder">samli</span>
+							在线视频课程 &copy; 2020-2023
 						</span>
 
                         &nbsp; &nbsp;
