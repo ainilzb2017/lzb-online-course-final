@@ -4,6 +4,7 @@ import com.ainilzb.server.domain.Chapter;
 import com.ainilzb.server.domain.ChapterExample;
 import com.ainilzb.server.dto.ChapterDto;
 import com.ainilzb.server.mapper.ChapterMapper;
+import com.github.pagehelper.PageHelper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -25,11 +26,12 @@ public class ChapterService {
     private ChapterMapper chapterMapper;
 
     public List<ChapterDto> list(){
+        PageHelper.startPage(1,1);
 
         //ChapterExample相当于where
         //排序
         ChapterExample chapterExample = new ChapterExample();
-        chapterExample.setOrderByClause("id desc");
+//        chapterExample.setOrderByClause("id asc");
 
 //        ChapterExample chapterExample = new ChapterExample();
 //        //andIdEqualTo可以看得出id=1
