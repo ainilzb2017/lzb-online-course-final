@@ -28,12 +28,12 @@ public class ChapterService {
 
         //ChapterExample相当于where
         //排序
-//        ChapterExample chapterExample = new ChapterExample();
-//        chapterExample.setOrderByClause("id desc");
-
         ChapterExample chapterExample = new ChapterExample();
-        //andIdEqualTo可以看得出id=1
-        chapterExample.createCriteria().andIdEqualTo("00000010");
+        chapterExample.setOrderByClause("id desc");
+
+//        ChapterExample chapterExample = new ChapterExample();
+//        //andIdEqualTo可以看得出id=1
+//        chapterExample.createCriteria().andIdEqualTo("00000010");
 
         List<Chapter> chapterList =  chapterMapper.selectByExample(chapterExample);
         List<ChapterDto> chapterDtoList = new ArrayList<ChapterDto>();
