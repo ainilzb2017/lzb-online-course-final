@@ -5,6 +5,7 @@ import com.ainilzb.server.domain.ChapterExample;
 import com.ainilzb.server.dto.ChapterDto;
 import com.ainilzb.server.dto.PageDto;
 import com.ainilzb.server.mapper.ChapterMapper;
+import com.ainilzb.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
@@ -52,5 +53,12 @@ public class ChapterService {
             chapterDtoList.add(chapterDto);
         }
         pageDto.setList(chapterDtoList);
+    }
+
+    public void save(ChapterDto chapterDto) {
+        chapterDto.setId(UuidUtil.getShortUuid());
+        Chapter chapter = new Chapter();
+        BeanUtils.copyProperties(chapterDto, chapter);
+        chapterMapper.insert(chapter);
     }
 }
