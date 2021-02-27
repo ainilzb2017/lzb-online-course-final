@@ -3,8 +3,10 @@ package com.ainilzb.server.service;
 import com.ainilzb.server.domain.Chapter;
 import com.ainilzb.server.domain.ChapterExample;
 import com.ainilzb.server.dto.ChapterDto;
+import com.ainilzb.server.dto.PageDto;
 import com.ainilzb.server.mapper.ChapterMapper;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
@@ -25,8 +27,8 @@ public class ChapterService {
     @Resource
     private ChapterMapper chapterMapper;
 
-    public List<ChapterDto> list(){
-        PageHelper.startPage(1,1);
+    public void list(PageDto pageDto){
+        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
 
         //ChapterExample相当于where
         //排序
@@ -38,6 +40,10 @@ public class ChapterService {
 //        chapterExample.createCriteria().andIdEqualTo("00000010");
 
         List<Chapter> chapterList =  chapterMapper.selectByExample(chapterExample);
+        //PageInfo是mybatis自己封装好的
+        PageInfo<Chapter> pageInfo = new PageInfo<>(chapterList);
+        pageDto.setTotal(pageInfo.getTotal());
+
         List<ChapterDto> chapterDtoList = new ArrayList<ChapterDto>();
         for (int i = 0; i < chapterList.size(); i++) {
             Chapter chapter = chapterList.get(i);
@@ -45,6 +51,6 @@ public class ChapterService {
             BeanUtils.copyProperties(chapter,chapterDto);
             chapterDtoList.add(chapterDto);
         }
-        return chapterDtoList;
+        pageDto.setList(chapterDtoList);
     }
 }
