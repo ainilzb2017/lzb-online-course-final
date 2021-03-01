@@ -5,6 +5,7 @@ import com.ainilzb.server.domain.ChapterExample;
 import com.ainilzb.server.dto.ChapterDto;
 import com.ainilzb.server.dto.PageDto;
 import com.ainilzb.server.mapper.ChapterMapper;
+import com.ainilzb.server.util.CopyUtil;
 import com.ainilzb.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
@@ -45,20 +46,22 @@ public class ChapterService {
         PageInfo<Chapter> pageInfo = new PageInfo<>(chapterList);
         pageDto.setTotal(pageInfo.getTotal());
 
-        List<ChapterDto> chapterDtoList = new ArrayList<ChapterDto>();
-        for (int i = 0; i < chapterList.size(); i++) {
-            Chapter chapter = chapterList.get(i);
-            ChapterDto chapterDto = new ChapterDto();
-            BeanUtils.copyProperties(chapter,chapterDto);
-            chapterDtoList.add(chapterDto);
-        }
+//        List<ChapterDto> chapterDtoList = new ArrayList<ChapterDto>();
+//        for (int i = 0; i < chapterList.size(); i++) {
+//            Chapter chapter = chapterList.get(i);
+//            ChapterDto chapterDto = new ChapterDto();
+//            BeanUtils.copyProperties(chapter,chapterDto);
+//            chapterDtoList.add(chapterDto);
+//        }
+        List<ChapterDto> chapterDtoList = CopyUtil.copyList(chapterList, ChapterDto.class);
         pageDto.setList(chapterDtoList);
     }
 
     public void save(ChapterDto chapterDto) {
         chapterDto.setId(UuidUtil.getShortUuid());
-        Chapter chapter = new Chapter();
-        BeanUtils.copyProperties(chapterDto, chapter);
+//        Chapter chapter = new Chapter();
+//        BeanUtils.copyProperties(chapterDto, chapter);
+        Chapter chapter = CopyUtil.copy(chapterDto, Chapter.class);
         chapterMapper.insert(chapter);
     }
 }
