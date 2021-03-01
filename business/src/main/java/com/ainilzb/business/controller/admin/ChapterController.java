@@ -17,6 +17,8 @@ import javax.annotation.Resource;
 @Slf4j
 public class ChapterController {
 
+    public static final String BUSINESS_NAME = "大章";
+
 
     @Resource
     private ChapterService chapterService;
