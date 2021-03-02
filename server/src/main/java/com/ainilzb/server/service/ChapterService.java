@@ -3,7 +3,7 @@ package com.ainilzb.server.service;
 import com.ainilzb.server.domain.Chapter;
 import com.ainilzb.server.domain.ChapterExample;
 import com.ainilzb.server.dto.ChapterDto;
-import com.ainilzb.server.dto.PageDto;
+import com.ainilzb.server.dto.ChapterPageDto;
 import com.ainilzb.server.mapper.ChapterMapper;
 import com.ainilzb.server.util.CopyUtil;
 import com.ainilzb.server.util.UuidUtil;
@@ -24,14 +24,18 @@ public class ChapterService {
     /**
      * 列表查询
      */
-    public void list(PageDto pageDto) {
-        PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
+    public void list(ChapterPageDto chapterPageDto) {
+        PageHelper.startPage(chapterPageDto.getPage(), chapterPageDto.getSize());
         ChapterExample chapterExample = new ChapterExample();
+        ChapterExample.Criteria criteria = chapterExample.createCriteria();
+        if (!StringUtils.isEmpty(chapterPageDto.getCourseId())) {
+            criteria.andCourseIdEqualTo(chapterPageDto.getCourseId());
+        }
         List<Chapter> chapterList = chapterMapper.selectByExample(chapterExample);
         PageInfo<Chapter> pageInfo = new PageInfo<>(chapterList);
-        pageDto.setTotal(pageInfo.getTotal());
+        chapterPageDto.setTotal(pageInfo.getTotal());
         List<ChapterDto> chapterDtoList = CopyUtil.copyList(chapterList, ChapterDto.class);
-        pageDto.setList(chapterDtoList);
+        chapterPageDto.setList(chapterDtoList);
     }
 
     /**

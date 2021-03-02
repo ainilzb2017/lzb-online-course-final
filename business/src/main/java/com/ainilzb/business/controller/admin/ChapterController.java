@@ -1,7 +1,7 @@
 package com.ainilzb.business.controller.admin;
 
 import com.ainilzb.server.dto.ChapterDto;
-import com.ainilzb.server.dto.PageDto;
+import com.ainilzb.server.dto.ChapterPageDto;
 import com.ainilzb.server.dto.ResponseDto;
 import com.ainilzb.server.service.ChapterService;
 import com.ainilzb.server.util.ValidatorUtil;
@@ -25,10 +25,11 @@ public class ChapterController {
      * 列表查询
      */
     @PostMapping("/list")
-    public ResponseDto list(@RequestBody PageDto pageDto) {
+    public ResponseDto list(@RequestBody ChapterPageDto chapterPageDto) {
         ResponseDto responseDto = new ResponseDto();
-        chapterService.list(pageDto);
-        responseDto.setContent(pageDto);
+        ValidatorUtil.require(chapterPageDto.getCourseId(), "课程ID");
+        chapterService.list(chapterPageDto);
+        responseDto.setContent(chapterPageDto);
         return responseDto;
     }
 
