@@ -17,15 +17,14 @@
     <table id="simple-table" class="table  table-bordered table-hover">
       <thead>
       <tr>
-        <th>id</th>
+        <th>ID</th>
         <th>标题</th>
         <th>课程</th>
-        <th>大章</th>
+        <th>章</th>
         <th>视频</th>
         <th>时长</th>
         <th>收费</th>
         <th>顺序</th>
-        <th>vod</th>
         <th>操作</th>
       </tr>
       </thead>
@@ -38,9 +37,8 @@
         <td>{{section.chapterId}}</td>
         <td>{{section.video}}</td>
         <td>{{section.time}}</td>
-        <td>{{section.charge}}</td>
+        <td>{{CHARGE | optionKV(section.charge)}}</td>
         <td>{{section.sort}}</td>
-        <td>{{section.vod}}</td>
       <td>
         <div class="hidden-sm hidden-xs btn-group">
           <button v-on:click="edit(section)" class="btn btn-xs btn-info">
@@ -77,7 +75,7 @@
                 </div>
               </div>
               <div class="form-group">
-                <label class="col-sm-2 control-label">大章</label>
+                <label class="col-sm-2 control-label">章</label>
                 <div class="col-sm-10">
                   <input v-model="section.chapterId" class="form-control">
                 </div>
@@ -97,19 +95,15 @@
               <div class="form-group">
                 <label class="col-sm-2 control-label">收费</label>
                 <div class="col-sm-10">
-                  <input v-model="section.charge" class="form-control">
+                  <select v-model="section.charge" class="form-control">
+                    <option v-for="o in CHARGE" v-bind:value="o.key">{{o.value}}</option>
+                  </select>
                 </div>
               </div>
               <div class="form-group">
                 <label class="col-sm-2 control-label">顺序</label>
                 <div class="col-sm-10">
                   <input v-model="section.sort" class="form-control">
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="col-sm-2 control-label">vod</label>
-                <div class="col-sm-10">
-                  <input v-model="section.vod" class="form-control">
                 </div>
               </div>
             </form>
@@ -132,7 +126,8 @@
     data: function() {
       return {
         section: {},
-        sections: []
+        sections: [],
+        CHARGE: [{key:"C", value:"收费"},{key:"F", value:"免费"}],
       }
     },
     mounted: function() {
