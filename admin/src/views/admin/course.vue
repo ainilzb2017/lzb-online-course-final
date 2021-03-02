@@ -28,6 +28,7 @@
         <th>状态</th>
         <th>报名数</th>
         <th>顺序</th>
+        <th>讲师</th>
         <th>操作</th>
       </tr>
       </thead>
@@ -45,6 +46,7 @@
         <td>{{COURSE_STATUS | optionKV(course.status)}}</td>
         <td>{{course.enroll}}</td>
         <td>{{course.sort}}</td>
+        <td>{{course.teacherId}}</td>
       <td>
         <div class="hidden-sm hidden-xs btn-group">
           <button v-on:click="edit(course)" class="btn btn-xs btn-info">
@@ -134,6 +136,12 @@
                   <input v-model="course.sort" class="form-control">
                 </div>
               </div>
+              <div class="form-group">
+                <label class="col-sm-2 control-label">讲师</label>
+                <div class="col-sm-10">
+                  <input v-model="course.teacherId" class="form-control">
+                </div>
+              </div>
             </form>
           </div>
           <div class="modal-footer">
@@ -157,7 +165,7 @@
         courses: [],
         COURSE_LEVEL: COURSE_LEVEL,
         COURSE_CHARGE: COURSE_CHARGE,
-        COURSE_STATUS: COURSE_STATUS
+        COURSE_STATUS: COURSE_STATUS,
       }
     },
     mounted: function() {
