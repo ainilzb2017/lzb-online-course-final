@@ -1,9 +1,6 @@
 package com.ainilzb.business.controller.admin;
 
-import com.ainilzb.server.dto.CourseCategoryDto;
-import com.ainilzb.server.dto.CourseDto;
-import com.ainilzb.server.dto.PageDto;
-import com.ainilzb.server.dto.ResponseDto;
+import com.ainilzb.server.dto.*;
 import com.ainilzb.server.service.CourseCategoryService;
 import com.ainilzb.server.service.CourseService;
 import com.ainilzb.server.util.ValidatorUtil;
@@ -74,6 +71,21 @@ public class CourseController {
         ResponseDto responseDto = new ResponseDto();
         List<CourseCategoryDto> dtoList = courseCategoryService.listByCourse(courseId);
         responseDto.setContent(dtoList);
+        return responseDto;
+    }
+
+    @GetMapping("/find-content/{id}")
+    public ResponseDto findContent(@PathVariable String id) {
+        ResponseDto responseDto = new ResponseDto();
+        CourseContentDto contentDto = courseService.findContent(id);
+        responseDto.setContent(contentDto);
+        return responseDto;
+    }
+
+    @PostMapping("/save-content")
+    public ResponseDto saveContent(@RequestBody CourseContentDto contentDto) {
+        ResponseDto responseDto = new ResponseDto();
+        courseService.saveContent(contentDto);
         return responseDto;
     }
 }
