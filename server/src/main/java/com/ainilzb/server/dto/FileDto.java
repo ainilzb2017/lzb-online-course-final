@@ -1,7 +1,8 @@
 package com.ainilzb.server.dto;
 
-import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+
+import java.util.Date;
 
 public class FileDto {
 
@@ -47,30 +48,18 @@ public class FileDto {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updatedAt;
 
-    /**
-     * 已上传分片
-     */
     private Integer shardIndex;
 
-    /**
-     * 分片大小|B
-     */
     private Integer shardSize;
 
-    /**
-     * 分片总数
-     */
     private Integer shardTotal;
 
-    /**
-     * 文件标识
-     */
     private String key;
 
     /**
-     * vod|阿里云vod
+     * base64
      */
-    private String vod;
+    private String shard;
 
     public String getId() {
         return id;
@@ -168,35 +157,31 @@ public class FileDto {
         this.key = key;
     }
 
-    public String getVod() {
-        return vod;
+    public String getShard() {
+        return shard;
     }
 
-    public void setVod(String vod) {
-        this.vod = vod;
+    public void setShard(String shard) {
+        this.shard = shard;
     }
-
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append(getClass().getSimpleName());
-        sb.append(" [");
-        sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
-        sb.append(", path=").append(path);
-        sb.append(", name=").append(name);
-        sb.append(", suffix=").append(suffix);
+        final StringBuffer sb = new StringBuffer("FileDto{");
+        sb.append("id='").append(id).append('\'');
+        sb.append(", path='").append(path).append('\'');
+        sb.append(", name='").append(name).append('\'');
+        sb.append(", suffix='").append(suffix).append('\'');
         sb.append(", size=").append(size);
-        sb.append(", use=").append(use);
+        sb.append(", use='").append(use).append('\'');
         sb.append(", createdAt=").append(createdAt);
         sb.append(", updatedAt=").append(updatedAt);
         sb.append(", shardIndex=").append(shardIndex);
         sb.append(", shardSize=").append(shardSize);
         sb.append(", shardTotal=").append(shardTotal);
-        sb.append(", key=").append(key);
-        sb.append(", vod=").append(vod);
-        sb.append("]");
+        sb.append(", key='").append(key).append('\'');
+        sb.append(", shard='").append(shard).append('\'');
+        sb.append('}');
         return sb.toString();
     }
 
