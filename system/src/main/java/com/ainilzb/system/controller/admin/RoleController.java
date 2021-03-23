@@ -1,8 +1,8 @@
 package com.ainilzb.system.controller.admin;
 
-import com.ainilzb.server.dto.RoleDto;
 import com.ainilzb.server.dto.PageDto;
 import com.ainilzb.server.dto.ResponseDto;
+import com.ainilzb.server.dto.RoleDto;
 import com.ainilzb.server.service.RoleService;
 import com.ainilzb.server.util.ValidatorUtil;
 import org.slf4j.Logger;
@@ -56,6 +56,19 @@ public class RoleController {
     public ResponseDto delete(@PathVariable String id) {
         ResponseDto responseDto = new ResponseDto();
         roleService.delete(id);
+        return responseDto;
+    }
+
+    /**
+     * 保存资源
+     * @param roleDto
+     */
+    @PostMapping("/save-resource")
+    public ResponseDto saveResource(@RequestBody RoleDto roleDto) {
+        LOG.info("保存角色资源关联开始");
+        ResponseDto<RoleDto> responseDto = new ResponseDto<>();
+        roleService.saveResource(roleDto);
+        responseDto.setContent(roleDto);
         return responseDto;
     }
 }
