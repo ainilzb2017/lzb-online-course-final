@@ -2,14 +2,20 @@ package com.ainilzb.server.service;
 
 import com.ainilzb.server.domain.User;
 import com.ainilzb.server.domain.UserExample;
-import com.ainilzb.server.dto.UserDto;
+import com.ainilzb.server.dto.LoginUserDto;
 import com.ainilzb.server.dto.PageDto;
+import com.ainilzb.server.dto.UserDto;
+import com.ainilzb.server.exception.BusinessException;
+import com.ainilzb.server.exception.BusinessExceptionCode;
 import com.ainilzb.server.mapper.UserMapper;
 import com.ainilzb.server.util.CopyUtil;
 import com.ainilzb.server.util.UuidUtil;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
@@ -17,6 +23,8 @@ import java.util.List;
 
 @Service
 public class UserService {
+
+    private static final Logger LOG = LoggerFactory.getLogger(UserService.class);
 
     @Resource
     private UserMapper userMapper;
@@ -51,6 +59,10 @@ public class UserService {
      */
     private void insert(User user) {
         user.setId(UuidUtil.getShortUuid());
+        User userDb = this.selectByLoginName(user.getLoginName());
+        if (userDb != null) {
+            throw new BusinessException(BusinessExceptionCode.USER_LOGIN_NAME_EXIST);
+        }
         userMapper.insert(user);
     }
 
@@ -58,7 +70,8 @@ public class UserService {
      * 更新
      */
     private void update(User user) {
-        userMapper.updateByPrimaryKey(user);
+        user.setPassword(null);
+        userMapper.updateByPrimaryKeySelective(user);
     }
 
     /**
@@ -66,5 +79,52 @@ public class UserService {
      */
     public void delete(String id) {
         userMapper.deleteByPrimaryKey(id);
+    }
+
+    /**
+     * 根据登录名查询用户信息
+     * @param loginName
+     * @return
+     */
+    public User selectByLoginName(String loginName) {
+        UserExample userExample = new UserExample();
+        userExample.createCriteria().andLoginNameEqualTo(loginName);
+        List<User> userList = userMapper.selectByExample(userExample);
+        if (CollectionUtils.isEmpty(userList)) {
+            return null;
+        } else {
+            return userList.get(0);
+        }
+    }
+
+    /**
+     * 重置密码
+     * @param userDto
+     */
+    public void savePassword(UserDto userDto) {
+        User user = new User();
+        user.setId(userDto.getId());
+        user.setPassword(userDto.getPassword());
+        userMapper.updateByPrimaryKeySelective(user);
+    }
+
+    /**
+     * 登录
+     * @param userDto
+     */
+    public LoginUserDto login(UserDto userDto) {
+        User user = selectByLoginName(userDto.getLoginName());
+        if (user == null) {
+            LOG.info("用户名不存在, {}", userDto.getLoginName());
+            throw new BusinessException(BusinessExceptionCode.LOGIN_ERROR);
+        } else {
+            if (user.getPassword().equals(userDto.getPassword())) {
+                // 登录成功
+                return CopyUtil.copy(user, LoginUserDto.class);
+            } else {
+                LOG.info("密码不对, 输入密码：{}, 数据库密码：{}", userDto.getPassword(), user.getPassword());
+                throw new BusinessException(BusinessExceptionCode.LOGIN_ERROR);
+            }
+        }
     }
 }

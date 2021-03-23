@@ -281,10 +281,6 @@
             <li class="light-blue dropdown-modal">
               <a data-toggle="dropdown" href="#" class="dropdown-toggle">
                 <img class="nav-user-photo" src="../../public/ace/assets/images/avatars/user.jpg" alt="Jason's Photo" />
-                <span class="user-info">
-									<small>Welcome,</small>
-									Jason
-								</span>
 
                 <i class="ace-icon fa fa-caret-down"></i>
               </a>
@@ -293,23 +289,23 @@
                 <li>
                   <a href="#">
                     <i class="ace-icon fa fa-cog"></i>
-                    Settings
+                    系统设置
                   </a>
                 </li>
 
                 <li>
                   <a href="profile.html">
                     <i class="ace-icon fa fa-user"></i>
-                    Profile
+                    个人信息
                   </a>
                 </li>
 
                 <li class="divider"></li>
 
                 <li>
-                  <a href="#">
+                  <a v-on:click="logout()" href="#">
                     <i class="ace-icon fa fa-power-off"></i>
-                    Logout
+                    退出登录
                   </a>
                 </li>
               </ul>
@@ -356,13 +352,13 @@
           <li class="" id="welcome-sidebar">
             <router-link to="/welcome">
               <i class="menu-icon fa fa-tachometer"></i>
-              <span class="menu-text"> 欢迎 </span>
+              <span class="menu-text"> 欢迎：{{loginUser.name}} </span>
             </router-link>
 
             <b class="arrow"></b>
           </li>
 
-          <li class="active open">
+          <li class="">
             <a href="#" class="dropdown-toggle">
               <i class="menu-icon fa fa-list"></i>
               <span class="menu-text"> 系统管理 </span>
@@ -373,7 +369,7 @@
             <b class="arrow"></b>
 
             <ul class="submenu">
-              <li class="active" id="system-user-sidebar">
+              <li class="" id="system-user-sidebar">
                 <router-link to="/system/user">
                   <i class="menu-icon fa fa-caret-right"></i>
                   用户管理
@@ -393,7 +389,7 @@
             </ul>
           </li>
 
-          <li class="active open">
+          <li class="">
             <a href="#" class="dropdown-toggle">
               <i class="menu-icon fa fa-list"></i>
               <span class="menu-text"> 业务管理 </span>
@@ -404,7 +400,7 @@
             <b class="arrow"></b>
 
             <ul class="submenu">
-              <li class="active" id="business-category-sidebar">
+              <li class="" id="business-category-sidebar">
                 <router-link to="/business/category">
                   <i class="menu-icon fa fa-caret-right"></i>
                   分类管理
@@ -412,7 +408,7 @@
 
                 <b class="arrow"></b>
               </li>
-              <li class="active" id="business-course-sidebar">
+              <li class="" id="business-course-sidebar">
                 <router-link to="/business/course">
                   <i class="menu-icon fa fa-caret-right"></i>
                   课程管理
@@ -420,7 +416,7 @@
 
                 <b class="arrow"></b>
               </li>
-              <li class="active" id="business-teacher-sidebar">
+              <li class="" id="business-teacher-sidebar">
                 <router-link to="/business/teacher">
                   <i class="menu-icon fa fa-caret-right"></i>
                   讲师管理
@@ -432,7 +428,7 @@
             </ul>
           </li>
 
-          <li class="active open">
+          <li class="">
             <a href="#" class="dropdown-toggle">
               <i class="menu-icon fa fa-list"></i>
               <span class="menu-text"> 文件管理 </span>
@@ -443,7 +439,7 @@
             <b class="arrow"></b>
 
             <ul class="submenu">
-              <li class="active" id="file-file-sidebar">
+              <li class="" id="file-file-sidebar">
                 <router-link to="/file/file">
                   <i class="menu-icon fa fa-caret-right"></i>
                   文件管理
@@ -512,6 +508,11 @@
 <script>
   export default {
     name: "admin",
+    data: function() {
+      return {
+        loginUser: {},
+      }
+    },
     mounted: function() {
       let _this = this;
       $("body").removeClass("login-layout light-login");
@@ -519,6 +520,10 @@
       // console.log("admin");
       // sidebar激活样式方法二
       _this.activeSidebar(_this.$route.name.replace("/", "-") + "-sidebar");
+
+      $.getScript('/ace/assets/js/ace.min.js');
+
+      _this.loginUser = Tool.getLoginUser();
     },
     watch: {
       $route: {
@@ -551,9 +556,25 @@
         let parentLi = $("#" + id).parents("li");
         if (parentLi) {
           parentLi.siblings().removeClass("open active");
+          parentLi.siblings().find("li").removeClass("active");
           parentLi.addClass("open active");
         }
-      }
+      },
+
+      logout () {
+        let _this = this;
+        Loading.show();
+        _this.$ajax.get(process.env.VUE_APP_SERVER + '/system/admin/user/logout/' + _this.loginUser.token).then((response)=>{
+          Loading.hide();
+          let resp = response.data;
+          if (resp.success) {
+            Tool.setLoginUser(null);
+            _this.$router.push("/login")
+          } else {
+            Toast.warning(resp.message)
+          }
+        });
+      },
     }
   }
 </script>

@@ -21,12 +21,18 @@ export default new Router({
         path: "*",
         redirect: "/login",
     }, {
+        path: "",
+        redirect: "/login",
+    }, {
         path: "/login",
         component: Login
     }, {
         path: "/",
         name: "admin",
         component: Admin,
+        meta: {
+            loginRequire: true
+        },
         children: [{
             path: "welcome",
             name: "welcome",

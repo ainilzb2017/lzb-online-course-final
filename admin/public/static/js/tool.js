@@ -14,7 +14,7 @@ Tool = {
    * 非空校验
    */
   isNotEmpty: function (obj) {
-    return !this.isEmpty();
+    return !this.isEmpty(obj);
   },
 
   /**
@@ -83,5 +83,37 @@ Tool = {
       arr.unshift(chars[mod]);
     } while (number);
     return arr.join('');
+  },
+
+  /**
+   * 保存登录用户信息
+   */
+  setLoginUser: function (loginUser) {
+    SessionStorage.set(SESSION_KEY_LOGIN_USER, loginUser);
+  },
+
+  /**
+   * 获取登录用户信息
+   */
+  getLoginUser: function () {
+    return SessionStorage.get(SESSION_KEY_LOGIN_USER) || {};
+  },
+
+  /**
+   * 随机生成[len]长度的[radix]进制数
+   * @param len
+   * @param radix 默认62
+   * @returns {string}
+   */
+  uuid: function (len, radix) {
+  let chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+  let uuid = [];
+  radix = radix || chars.length;
+
+  for (let i = 0; i < len; i++) {
+    uuid[i] = chars[0 | Math.random() * radix];
   }
+
+  return uuid.join('');
+}
 };
