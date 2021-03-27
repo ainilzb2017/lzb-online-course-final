@@ -3,10 +3,7 @@ package com.ainilzb.server.service;
 import com.ainilzb.server.domain.Course;
 import com.ainilzb.server.domain.CourseContent;
 import com.ainilzb.server.domain.CourseExample;
-import com.ainilzb.server.dto.CourseContentDto;
-import com.ainilzb.server.dto.CourseDto;
-import com.ainilzb.server.dto.PageDto;
-import com.ainilzb.server.dto.SortDto;
+import com.ainilzb.server.dto.*;
 import com.ainilzb.server.enums.CourseStatusEnum;
 import com.ainilzb.server.mapper.CourseContentMapper;
 import com.ainilzb.server.mapper.CourseMapper;
@@ -45,9 +42,13 @@ public class CourseService {
     /**
      * 列表查询
      */
-    public void list(PageDto pageDto) {
+    public void list(CoursePageDto pageDto) {
         PageHelper.startPage(pageDto.getPage(), pageDto.getSize());
         CourseExample courseExample = new CourseExample();
+        CourseExample.Criteria criteria = courseExample.createCriteria();
+        if (!StringUtils.isEmpty(pageDto.getStatus())) {
+            criteria.andStatusEqualTo(pageDto.getStatus());
+        }
         courseExample.setOrderByClause("sort asc");
         List<Course> courseList = courseMapper.selectByExample(courseExample);
         PageInfo<Course> pageInfo = new PageInfo<>(courseList);
