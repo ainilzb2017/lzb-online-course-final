@@ -254,6 +254,7 @@
         let video = resp.content.path;
         _this.section.video = video;
         _this.getTime();
+        _this.$forceUpdate();
       },
 
       /**
