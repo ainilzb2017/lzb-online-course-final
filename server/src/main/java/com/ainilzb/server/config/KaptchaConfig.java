@@ -25,7 +25,7 @@ public class KaptchaConfig {
         properties.setProperty("kaptcha.noise.color", "255,96,0");
         properties.setProperty("kaptcha.noise.impl", "com.google.code.kaptcha.impl.NoNoise");
 //        properties.setProperty("kaptcha.obscurificator.impl", "com.google.code.kaptcha.impl.WaterRipple");
-        properties.setProperty("kaptcha.obscurificator.impl", "com.course.server.util.NoWaterRipple");
+        properties.setProperty("kaptcha.obscurificator.impl", "com.ainilzb.server.util.NoWaterRipple");
         Config config = new Config(properties);
         defaultKaptcha.setConfig(config);
         return defaultKaptcha;
