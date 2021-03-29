@@ -18,7 +18,8 @@
               <span class="price-now text-danger"><i class="fa fa-yen"></i>&nbsp;{{course.price}}&nbsp;&nbsp;</span>
             </p>
             <p class="course-head-button-links">
-              <a class="btn btn-lg btn-primary btn-shadow" href="javascript:;">立即报名</a>
+              <a v-show="!memberCourse.id" v-on:click="enroll()" class="btn btn-lg btn-primary btn-shadow" href="javascript:;">立即报名</a>
+              <a v-show="memberCourse.id" href="#" class="btn btn-lg btn-success btn-shadow disabled">您已报名</a>
             </p>
           </div>
         </div>
@@ -56,7 +57,7 @@
                     <table class="table table-striped">
                       <tr v-for="(s, j) in chapter.sections" class="chapter-section-tr">
                         <td class="col-sm-8 col-xs-12">
-                          <div class="section-title">
+                          <div v-on:click="play(s)" class="section-title">
                             <i class="fa fa-video-camera d-none d-sm-inline"></i>&nbsp;&nbsp;
                             <span class="d-none d-sm-inline">第{{j+1}}节&nbsp;&nbsp;</span>
                             {{s.title}}
@@ -91,13 +92,16 @@
       </div>
     </div>
 
+    <modal-player ref="modalPlayer"></modal-player>
   </main>
 </template>
 
 <script>
 
+  import ModalPlayer from "../components/modal-player";
   export default {
     name: 'detail',
+    components: {ModalPlayer},
     data: function () {
       return {
         id: "",
@@ -105,6 +109,7 @@
         teacher: {},
         chapters: [],
         sections: [],
+        memberCourse: {},
         COURSE_LEVEL: COURSE_LEVEL,
         SECTION_CHARGE: SECTION_CHARGE
       }
@@ -134,6 +139,7 @@
                 c.sections.push(s);
               }
             }
+
             Tool.sortAsc(c.sections, "sort");
           }
         })
@@ -148,6 +154,43 @@
         chapter.folded = !chapter.folded;
         // 在v-for里写v-show，只修改属性不起作用，需要$set
         _this.$set(_this.chapters, i, chapter);
+      },
+
+      /**
+       * 播放视频
+       * @param section
+       */
+      play(section) {
+        let _this = this;
+        if (section.charge === _this.SECTION_CHARGE.CHARGE.key ) {
+          Toast.warning("请先登录");
+        } else {
+          _this.$refs.modalPlayer.playVod(section.vod);
+        }
+      },
+
+      /**
+       * 报名
+       */
+      enroll() {
+        let _this = this;
+        let loginMember = Tool.getLoginMember();
+        if (Tool.isEmpty(loginMember)) {
+          Toast.warning("请先登录");
+          return;
+        }
+        _this.$ajax.post(process.env.VUE_APP_SERVER + '/business/web/member-course/enroll', {
+          courseId: _this.course.id,
+          memberId: loginMember.id
+        }).then((response)=>{
+          let resp = response.data;
+          if (resp.success) {
+            _this.memberCourse = resp.content;
+            Toast.success("报名成功！");
+          } else {
+            Toast.warning(resp.message);
+          }
+        });
       },
     }
   }
